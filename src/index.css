@@ -1,0 +1,7 @@
+/* Global reset — App.css handles all component styles */
+body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,909 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   SentinelAPI — Complete Design System
+   Fonts  : Syne (headings) · Inter (body) · IBM Plex Mono (numbers/code)
+   Icons  : Hand-drawn inline SVG — no icon library needed
+   Themes : [data-theme="dark"] (default) and [data-theme="light"]
+   Author : SentinelAPI v2
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. GOOGLE FONTS IMPORT ──────────────────────────────────────────────
+   Three fonts are loaded via a single Google Fonts URL:
+   • Syne        — geometric display font, used for headings, brand, buttons
+   • Inter       — humanist sans-serif, used for body text, labels, tables
+   • IBM Plex Mono — monospace, used for numbers, timestamps, code values
+   display=swap  → shows fallback font while webfont loads (no invisible text)
+──────────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ── 2. DARK THEME TOKENS ────────────────────────────────────────────────
+   CSS custom properties (variables) live on [data-theme="dark"].
+   We set this attribute on <html> in App.tsx via ThemeContext.
+   Every color in the app references these — never hardcoded hex in components.
+
+   Background layers (darkest → lightest):
+   --bg   #0a0b0d  → true page background (almost black)
+   --bg2  #111318  → sidebar, topbar, card surfaces
+   --bg3  #181c24  → hover states, input backgrounds, secondary surfaces
+   --bg4  #1e2330  → range track, deepest inset surfaces
+
+   Border layers (using rgba for compositing):
+   --border   5% white  → faintest dividers
+   --border2  9% white  → default input/card borders
+   --border3  16% white → hover/active borders
+
+   Text layers:
+   --text   #e8eaf0 → primary content
+   --text2  #8b90a0 → secondary labels, table cells
+   --text3  #555b6e → muted labels, timestamps, placeholders
+
+   Accent (blue):
+   --accent       #4f6ef7 → buttons, active nav, links
+   --accent2      #6c84fa → lighter accent for hover states
+   --accent-glow  25% accent → glow ring, active nav background
+
+   Semantic colors: green / amber / red
+   Each has three variants: solid color, 7% bg tint, 17% border
+──────────────────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg:           #0a0b0d;
+  --bg2:          #111318;
+  --bg3:          #181c24;
+  --bg4:          #1e2330;
+  --border:       rgba(255,255,255,0.05);
+  --border2:      rgba(255,255,255,0.09);
+  --border3:      rgba(255,255,255,0.16);
+  --text:         #e8eaf0;
+  --text2:        #8b90a0;
+  --text3:        #555b6e;
+  --accent:       #4f6ef7;
+  --accent2:      #6c84fa;
+  --accent-glow:  rgba(79,110,247,0.25);
+  --green:        #22c55e;
+  --green-bg:     rgba(34,197,94,0.07);
+  --green-border: rgba(34,197,94,0.17);
+  --amber:        #f59e0b;
+  --amber-bg:     rgba(245,158,11,0.07);
+  --amber-border: rgba(245,158,11,0.17);
+  --red:          #ef4444;
+  --red-bg:       rgba(239,68,68,0.07);
+  --red-border:   rgba(239,68,68,0.17);
+  --orange-bg:    rgba(249,115,22,0.07);
+  --orange-border:rgba(249,115,22,0.17);
+  /* Shadow: barely visible in dark mode — just depth hint */
+  --shadow:       0 1px 3px rgba(0,0,0,0.4);
+  --shadow-lg:    0 4px 16px rgba(0,0,0,0.5);
+}
+
+/* ── 3. LIGHT THEME TOKENS ───────────────────────────────────────────────
+   All the same variable names, different values.
+   React reads [data-theme] from <html> and swaps the entire palette.
+
+   Background layers (lightest → slightly darker):
+   --bg   #f4f5f7 → page background (light grey, not pure white)
+   --bg2  #ffffff → sidebar, topbar, card surfaces (pure white)
+   --bg3  #f0f2f5 → hover states, input bg
+   --bg4  #e4e6eb → deepest inset (range track)
+
+   Borders: rgba black instead of rgba white
+   Text: near-black primary, medium-grey secondary
+   Accent stays the same blue — readable on both backgrounds
+   Semantic colors slightly deeper for contrast on white
+──────────────────────────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg:           #f4f5f7;
+  --bg2:          #ffffff;
+  --bg3:          #f0f2f5;
+  --bg4:          #e4e6eb;
+  --border:       rgba(0,0,0,0.06);
+  --border2:      rgba(0,0,0,0.10);
+  --border3:      rgba(0,0,0,0.18);
+  --text:         #111318;
+  --text2:        #4b5263;
+  --text3:        #8b90a0;
+  --accent:       #3d5ef5;
+  --accent2:      #5570f8;
+  --accent-glow:  rgba(61,94,245,0.12);
+  --green:        #16a34a;
+  --green-bg:     rgba(22,163,74,0.08);
+  --green-border: rgba(22,163,74,0.20);
+  --amber:        #b45309;
+  --amber-bg:     rgba(180,83,9,0.08);
+  --amber-border: rgba(180,83,9,0.20);
+  --red:          #dc2626;
+  --red-bg:       rgba(220,38,38,0.08);
+  --red-border:   rgba(220,38,38,0.20);
+  --orange-bg:    rgba(234,88,12,0.08);
+  --orange-border:rgba(234,88,12,0.20);
+  --shadow:       0 1px 3px rgba(0,0,0,0.08);
+  --shadow-lg:    0 4px 16px rgba(0,0,0,0.12);
+}
+
+/* ── 4. SHARED DESIGN TOKENS ─────────────────────────────────────────────
+   These never change between themes — they're layout/typography constants.
+   --font-head  : Syne — used for brand name, page titles, section headers
+   --font-body  : Inter — everything else (nav, labels, table, forms)
+   --font-mono  : IBM Plex Mono — numbers (KPI values, timestamps, risk scores)
+   --r / --r2 / --r3 : border-radius scale (8 → 12 → 16px)
+   --sidebar-w  : controlled here so responsive breakpoints override ONE var
+──────────────────────────────────────────────────────────────────────── */
+:root {
+  --font-head:  'Syne', sans-serif;
+  --font-body:  'Inter', sans-serif;
+  --font-mono:  'IBM Plex Mono', monospace;
+  --r:    8px;
+  --r2:   12px;
+  --r3:   16px;
+  --sidebar-w: 220px;
+}
+
+/* ── 5. CSS RESET ────────────────────────────────────────────────────────
+   box-sizing: border-box on every element means padding/border are INCLUDED
+   in the declared width — prevents overflow surprises.
+   margin/padding 0 removes browser default spacing on all elements.
+   html font-size: 14px sets the base rem scale (1rem = 14px).
+──────────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+
+body {
+  background: var(--bg);           /* Uses current theme's page background */
+  color: var(--text);              /* Uses current theme's primary text */
+  font-family: var(--font-body);   /* Inter for body text */
+  line-height: 1.5;                /* 1.5x font-size = comfortable reading */
+  min-height: 100vh;               /* Always fills the full viewport height */
+  -webkit-font-smoothing: antialiased;  /* Crisp text on macOS/Chrome */
+  transition: background 0.25s ease, color 0.25s ease; /* Smooth theme switch */
+}
+
+/* ── 6. CUSTOM SCROLLBAR ─────────────────────────────────────────────────
+   ::-webkit-scrollbar targets Chrome/Safari/Edge (not Firefox).
+   width: 5px gives a thin, unobtrusive scrollbar.
+   background: transparent makes the track invisible.
+   thumb uses --border2 (semi-transparent) — visible on both themes.
+──────────────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border3); }
+
+/* ── 7. APP SHELL ────────────────────────────────────────────────────────
+   The top-level layout is a CSS Grid with 2 columns:
+   Column 1: --sidebar-w (220px) — the fixed left sidebar
+   Column 2: 1fr (all remaining space) — the main content area
+   min-height: 100vh ensures the grid fills the full viewport.
+──────────────────────────────────────────────────────────────────────── */
+.app-shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: 100vh;
+  transition: grid-template-columns 0.25s ease;
+}
+
+/* .main-area is column 2 — flex column to stack topbar + content */
+.main-area {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;               /* Prevents horizontal scroll bleed */
+  min-width: 0;                   /* Prevents grid blowout on wide content */
+}
+
+/* ── 8. SIDEBAR ──────────────────────────────────────────────────────────
+   position: sticky + height: 100vh keeps the sidebar visible while
+   the main content scrolls. The sidebar itself doesn't scroll.
+   overflow: hidden clips anything that overflows (long nav labels etc.)
+──────────────────────────────────────────────────────────────────────── */
+.sidebar {
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;         /* Stack: brand → nav → footer */
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+/* Brand row — clickable, navigates to overview */
+.brand {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;                /* Clickable — navigates to overview */
+  text-decoration: none;          /* In case wrapped in <a> */
+  transition: opacity 0.15s;
+  user-select: none;
+}
+
+.brand:hover { opacity: 0.82; }   /* Subtle hover feedback */
+
+/* The hexagon icon container — blue background, rounded corners */
+.brand-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--accent);      /* Blue background */
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;                 /* Never shrinks even if space is tight */
+  transition: background 0.25s;
+}
+
+/* The SVG inside brand-icon: hexagon + center dot — hand-drawn inline SVG */
+.brand-icon svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: #fff;                   /* White stroke — always white on blue */
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.brand-name {
+  font-family: var(--font-head);  /* Syne — distinctive display font */
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.2px;         /* Slight tightening for Syne's geometry */
+  color: var(--text);
+}
+
+.brand-sub {
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;      /* All-caps small label */
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+/* ── 9. NAVIGATION ───────────────────────────────────────────────────────
+   .nav is the scrollable nav area between brand and footer.
+   flex: 1 makes it expand to fill available height.
+   gap: 2px keeps items visually tight.
+──────────────────────────────────────────────────────────────────────── */
+.nav {
+  padding: 12px 8px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;               /* Scrolls if many nav items */
+}
+
+/* Section headers: "Analytics", "Operations" */
+.nav-section-label {
+  font-size: 10px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 10px 12px 6px;
+  font-weight: 600;
+}
+
+/* Individual nav buttons — each is a <button> for accessibility */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--r);        /* 8px rounded */
+  cursor: pointer;
+  color: var(--text2);            /* Muted by default */
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s;
+  border: 1px solid transparent;  /* Transparent border — becomes visible when active */
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-body);  /* Inter */
+}
+
+.nav-item:hover {
+  background: var(--bg3);         /* Slightly lighter hover background */
+  color: var(--text);             /* Full text color on hover */
+}
+
+/* Active state: blue glow background + accent text + visible border */
+.nav-item.active {
+  background: var(--accent-glow); /* 25% blue tint */
+  color: var(--accent2);          /* Lighter blue text */
+  border-color: var(--border2);   /* Subtle border becomes visible */
+}
+
+/* SVG icons inside nav items — hand-drawn, 15×15px, stroke-only */
+.nav-item svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  opacity: 0.8;
+  fill: none;
+  stroke: currentColor;           /* Inherits color from parent .nav-item */
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── 10. SIDEBAR FOOTER ──────────────────────────────────────────────────
+   Always at the bottom of the sidebar — flex layout naturally pushes it down.
+──────────────────────────────────────────────────────────────────────── */
+.sidebar-footer {
+  padding: 12px 8px;
+  border-top: 1px solid var(--border);
+}
+
+/* Pulsing green "All Systems Operational" pill */
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--r);
+  background: var(--green-bg);    /* 7% green tint */
+  border: 1px solid var(--green-border); /* 17% green border */
+}
+
+/* The animated green dot — CSS pulse animation using box-shadow */
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Expands box-shadow radius from 0 to 4px, fading to transparent = pulse ring */
+@keyframes pulse-dot {
+  0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+  50%      { box-shadow: 0 0 0 4px rgba(34,197,94,0); }
+}
+
+.status-label { font-size: 12px; font-weight: 500; color: var(--green); }
+.status-sub   { font-size: 10px; color: var(--text3); margin-top: 1px; }
+
+/* ── 11. THEME TOGGLE BUTTON (in topbar) ─────────────────────────────────
+   A pill-shaped toggle that shows sun ☀ (dark mode) or moon 🌙 (light mode).
+   Sits in the topbar row.
+──────────────────────────────────────────────────────────────────────── */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font-body);
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: var(--accent-glow);
+}
+
+.theme-toggle svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* ── 12. TOPBAR ──────────────────────────────────────────────────────────
+   position: sticky + top:0 + z-index:10 keeps the topbar visible while
+   the content area scrolls. It sits above all cards in the z-stack.
+──────────────────────────────────────────────────────────────────────── */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: background 0.25s ease;
+}
+
+.topbar-title {
+  font-family: var(--font-head);  /* Syne */
+  font-weight: 700;
+  font-size: 18px;
+  flex: 1;                        /* Pushes other items to the right */
+  color: var(--text);
+}
+
+/* Accent-colored part of title (e.g. "System Overview" → "Overview" in blue) */
+.topbar-title span { color: var(--accent2); }
+
+/* Live clock display — monospace so digits don't jump width when changing */
+.ts-label {
+  font-family: var(--font-mono);  /* IBM Plex Mono */
+  font-size: 11px;
+  color: var(--text3);
+}
+
+/* ── 13. STATUS BADGE ────────────────────────────────────────────────────
+   Pill-shaped badge in topbar showing system health.
+   Three color variants match the semantic color system.
+──────────────────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;            /* Full pill shape */
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.badge-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.badge-red   { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-border); }
+
+/* ── 14. AUTO-REFRESH INDICATOR ──────────────────────────────────────────
+   A tiny blinking blue dot in the topbar.
+   Uses CSS keyframes to fade opacity 1 → 0.3 → 1 every 1.5s.
+──────────────────────────────────────────────────────────────────────── */
+.refresh-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 1.5s ease-in-out infinite;
+  cursor: help;
+  flex-shrink: 0;
+}
+
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+
+/* ── 15. CONTENT AREA ────────────────────────────────────────────────────
+   flex:1 makes it fill all remaining height below the topbar.
+   overflow-y: auto enables vertical scrolling for tall pages.
+   gap: 16px spaces out all direct children (cards, grids, etc.).
+──────────────────────────────────────────────────────────────────────── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── 16. ALERT BANNER ────────────────────────────────────────────────────
+   Slides in from the top using CSS animation.
+   Two variants: .critical (red) and .warning (amber).
+   Only appears when risk_score > 60 (from evaluateAlerts in App.tsx).
+──────────────────────────────────────────────────────────────────────── */
+.alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--r2);
+  border: 1px solid;              /* Color set by variant modifier class */
+  animation: slide-in 0.3s ease;
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.alert-banner.critical { background: var(--red-bg);   border-color: var(--red-border); }
+.alert-banner.warning  { background: var(--amber-bg); border-color: var(--amber-border); }
+
+.alert-icon {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.alert-banner.critical .alert-icon { background: var(--red-bg);   border: 1px solid var(--red-border); }
+.alert-banner.warning  .alert-icon { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+
+.alert-icon svg { width: 15px; height: 15px; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.alert-banner.critical .alert-icon svg { stroke: var(--red); }
+.alert-banner.warning  .alert-icon svg { stroke: var(--amber); }
+
+.alert-text h4 { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.alert-text p  { font-size: 12px; color: var(--text2); }
+.alert-banner.critical .alert-text h4 { color: var(--red); }
+.alert-banner.warning  .alert-text h4 { color: var(--amber); }
+
+.alert-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+
+.alert-close:hover { color: var(--text); }
+
+/* ── 17. KPI GRID ────────────────────────────────────────────────────────
+   Four equal-width KPI cards in a grid row.
+   Each card has a hover effect: border brightens + top accent line appears.
+──────────────────────────────────────────────────────────────────────── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.kpi-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 16px;
+  position: relative;             /* For ::before accent line */
+  overflow: hidden;               /* Clips the ::before to card bounds */
+  transition: border-color 0.2s, background 0.25s;
+}
+
+.kpi-card:hover { border-color: var(--border3); }
+
+/* Animated top border accent line — fades in on hover */
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.kpi-card:hover::before { opacity: 1; }
+
+/* Small label above the number */
+.kpi-label {
+  font-size: 11px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.kpi-label svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+/* The big number — IBM Plex Mono, colored by the specific metric */
+.kpi-value {
+  font-family: var(--font-mono);  /* IBM Plex Mono — digits stay same width */
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 6px;
+  letter-spacing: -1px;           /* Tighter spacing for large numbers */
+}
+
+.kpi-meta { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
+
+/* Trend chips: green for improvement, red for worsening */
+.kpi-trend { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
+.trend-up      { background: rgba(34,197,94,0.1);   color: var(--green); }
+.trend-down    { background: rgba(239,68,68,0.1);   color: var(--red); }
+.trend-neutral { background: rgba(139,144,160,0.1); color: var(--text2); }
+
+.kpi-sparkline { margin-top: 10px; height: 32px; }
+
+/* ── 18. CARD ────────────────────────────────────────────────────────────
+   Base card component: white (light) or --bg2 (dark) surface.
+   overflow: hidden clips chart canvases to card bounds.
+──────────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  overflow: hidden;
+  transition: background 0.25s, border-color 0.25s;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+  font-family: var(--font-head);  /* Syne */
+  font-weight: 600;
+  font-size: 14px;
+  flex: 1;
+  color: var(--text);
+}
+
+/* Subtitle after the title — muted, smaller */
+.card-title span {
+  color: var(--text3);
+  font-weight: 400;
+  font-size: 12px;
+  margin-left: 4px;
+  font-family: var(--font-body);  /* Inter, not Syne */
+}
+
+.card-body { padding: 16px; }
+
+/* Small action button in card header (Refresh, Export, etc.) */
+.card-action {
+  font-size: 12px;
+  color: var(--accent2);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--border2);
+  padding: 5px 12px;
+  border-radius: var(--r);
+  font-weight: 500;
+  transition: all 0.15s;
+  font-family: var(--font-body);
+}
+
+.card-action:hover { background: var(--accent-glow); border-color: var(--accent); }
+.card-action:disabled { opacity: 0.4; pointer-events: none; }
+
+/* ── 19. CHART CONTAINERS ────────────────────────────────────────────────
+   Chart.js requires a parent with explicit height.
+   position: relative is required by Chart.js for responsive sizing.
+──────────────────────────────────────────────────────────────────────── */
+.charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+.chart-wrap { position: relative; width: 100%; height: 220px; }
+
+/* ── 20. GAUGE RINGS ─────────────────────────────────────────────────────
+   Three mini circular gauges drawn on <canvas> elements using raw Canvas 2D.
+   The ring is drawn as two arcs: grey track + colored fill.
+   The value text sits in an absolutely-positioned overlay div.
+──────────────────────────────────────────────────────────────────────── */
+.gauges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 16px; }
+.gauge-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.gauge-ring { position: relative; width: 72px; height: 72px; }
+.gauge-ring canvas { position: absolute; top: 0; left: 0; }  /* Canvas fills the ring div */
+.gauge-val { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.gauge-val .v { font-family: var(--font-mono); font-size: 15px; font-weight: 500; line-height: 1; color: var(--text); }
+.gauge-val .u { font-size: 9px; color: var(--text3); }
+.gauge-lbl { font-size: 11px; color: var(--text2); text-align: center; font-weight: 500; }
+
+/* ── 21. GRID LAYOUTS ────────────────────────────────────────────────────
+   Reusable grid classes used across multiple pages.
+──────────────────────────────────────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* ── 22. PREDICTION FORM ─────────────────────────────────────────────────
+   Input fields with live slider controls.
+   The label row uses flexbox to place the field name on the left
+   and the live value readout on the right.
+──────────────────────────────────────────────────────────────────────── */
+.predict-form { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+
+.field label {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Live value shown on right side of label — monospace so it doesn't shift */
+.field label span {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text2);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+/* ── 23. RANGE SLIDER ────────────────────────────────────────────────────
+   CSS removes native browser styling, then re-styles completely.
+   -webkit-appearance: none removes all default styling on Chrome/Safari.
+   The track is a thin 4px bar using --bg4 as the background.
+   The thumb is a 14px circle with accent color and a glow on hover.
+──────────────────────────────────────────────────────────────────────── */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bg4);
+  outline: none;
+  cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--accent2);
+  border: 2px solid var(--bg2);   /* White ring separates thumb from track */
+  cursor: pointer;
+  box-shadow: 0 0 0 0 var(--accent-glow);
+  transition: box-shadow 0.15s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 4px var(--accent-glow); /* Blue glow ring appears */
+}
+
+/* ── 24. PREDICT BUTTON ──────────────────────────────────────────────────
+   Full-width blue button using Syne font for a distinctive look.
+   translateY(-1px) on hover gives a subtle "lift" effect.
+──────────────────────────────────────────────────────────────────────── */
+.predict-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px;
+  border-radius: var(--r);
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  font-family: var(--font-head);  /* Syne — distinctive */
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.2px;
+}
+
+.predict-btn:hover { background: var(--accent2); transform: translateY(-1px); }
+.predict-btn:active { transform: translateY(0); }
+.predict-btn svg { width: 15px; height: 15px; stroke: #fff; fill: none; stroke-width: 2.5; stroke-linecap: round; }
+.predict-btn:disabled { opacity: 0.6; pointer-events: none; }
+
+/* ── 25. PREDICTION RESULT BOX ───────────────────────────────────────────
+   Two variants: .high (red) and .stable (green).
+   The risk score number is displayed right-aligned using margin-left: auto.
+──────────────────────────────────────────────────────────────────────── */
+.result-box { border-radius: var(--r); padding: 12px 14px; border: 1px solid; display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+.result-box.high   { background: var(--red-bg);   border-color: var(--red-border); }
+.result-box.stable { background: var(--green-bg); border-color: var(--green-border); }
+.result-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+.result-info h4 { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.result-info p  { font-size: 11px; color: var(--text2); }
+.result-box.high   .result-info h4 { color: var(--red); }
+.result-box.stable .result-info h4 { color: var(--green); }
+.result-score { margin-left: auto; text-align: right; }
+.result-score .num { font-family: var(--font-mono); font-size: 22px; font-weight: 500; }
+.result-score .lbl { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
+.result-box.high   .result-score .num { color: var(--red); }
+.result-box.stable .result-score .num { color: var(--green); }
+
+/* ── 26. LOG TABLE ───────────────────────────────────────────────────────
+   border-collapse: collapse removes double borders between cells.
+   The thead uses position: sticky so it stays visible when scrolling.
+   background: var(--bg2) on sticky header prevents content bleed-through.
+──────────────────────────────────────────────────────────────────────── */
+.log-scroll { overflow: auto; max-height: 320px; }
+
+.log-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+
+.log-table thead th {
+  padding: 8px 14px;
+  text-align: left;
+  font-size: 10px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--bg2);         /* Must match card bg — sticky needs solid bg */
+  transition: background 0.25s;
+}
+
+.log-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+.log-table tbody tr:hover { background: var(--bg3); }
+.log-table tbody tr:last-child { border-bottom: none; }
+.log-table td { padding: 9px 14px; color: var(--text2); font-family: var(--font-mono); vertical-align: middle; }
+.log-table td:first-child { color: var(--text3); font-size: 11px; }
+
+/* Prediction status badges in table */
+.pred-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; font-family: var(--font-body); }
+.pred-high   { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-border); }
+.pred-stable { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+
+/* Risk bar: narrow horizontal progress bar showing risk score 0–100 */
+.risk-bar-wrap { display: flex; align-items: center; gap: 6px; }
+.risk-bar { height: 4px; border-radius: 2px; background: var(--bg4); width: 60px; overflow: hidden; }
+.risk-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+
+/* ── 27. EMPTY STATE ─────────────────────────────────────────────────────
+   Centered flex column with a faint SVG icon and short message.
+   Used when logs array is empty.
+──────────────────────────────────────────────────────────────────────── */
+.empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px; gap: 8px; color: var(--text3); }
+.empty svg { width: 32px; height: 32px; stroke: var(--text3); fill: none; stroke-width: 1.5; opacity: 0.5; }
+.empty p { font-size: 12px; }
+
+/* ── 28. LOADING SKELETON ────────────────────────────────────────────────
+   Animated shimmer effect for loading states.
+   The gradient moves left-to-right creating a scanning highlight.
+──────────────────────────────────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg3) 25%, var(--bg4) 50%, var(--bg3) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── 29. PAGE ENTER ANIMATION ────────────────────────────────────────────
+   Every direct child of .content fades in + slides up 6px when mounted.
+   This gives smooth page transitions without a router library.
+──────────────────────────────────────────────────────────────────────── */
+.content > * { animation: page-in 0.2s ease; }
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 30. NUMBER INPUTS ───────────────────────────────────────────────────
+   Remove the browser's default spin buttons on <input type="number">.
+   Firefox uses -moz-appearance, WebKit uses the pseudo-element selectors.
+──────────────────────────────────────────────────────────────────────── */
+input[type=number] { -moz-appearance: textfield; }
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+/* ── 31. RESPONSIVE BREAKPOINTS ──────────────────────────────────────────
+   1100px: collapse 4-col KPI to 2-col, stack charts and grid-2
+   768px: hide sidebar entirely, switch KPI to 2-col, reduce padding
+──────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .kpi-grid    { grid-template-columns: repeat(2, 1fr); }
+  .charts-row  { grid-template-columns: 1fr; }
+  .grid-2      { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  :root        { --sidebar-w: 0px; }   /* Collapse sidebar slot to zero */
+  .sidebar     { display: none; }       /* Hide sidebar */
+  .kpi-grid    { grid-template-columns: 1fr 1fr; }
+  .form-grid   { grid-template-columns: 1fr; }
+  .content     { padding: 14px; }
+  .topbar      { padding: 12px 16px; }
+}
