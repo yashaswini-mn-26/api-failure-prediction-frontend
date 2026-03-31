@@ -50,19 +50,17 @@ const NAV_ITEMS: {
       {
         page: "overview",
         label: "Overview",
-        // Bar chart: 3 rectangles increasing in height (left to right)
         icon: (
           <svg viewBox="0 0 16 16">
-            <rect x="1" y="9"  width="3" height="6" rx="1"/>  {/* Short left bar */}
-            <rect x="6" y="5"  width="3" height="10" rx="1"/> {/* Medium center bar */}
-            <rect x="11" y="1" width="3" height="14" rx="1"/> {/* Tall right bar */}
+            <rect x="1" y="9" width="3" height="6" rx="1"/>
+            <rect x="6" y="5" width="3" height="10" rx="1"/>
+            <rect x="11" y="1" width="3" height="14" rx="1"/>
           </svg>
         ),
       },
       {
         page: "metrics",
         label: "Metrics",
-        // Line chart: a polyline connecting 4 data points
         icon: (
           <svg viewBox="0 0 16 16">
             <polyline points="1,11 5,6 9,9 15,3"/>
@@ -72,7 +70,6 @@ const NAV_ITEMS: {
       {
         page: "history",
         label: "History",
-        // Clock: circle + hour hand (vertical line) + minute hand (diagonal)
         icon: (
           <svg viewBox="0 0 16 16">
             <circle cx="8" cy="8" r="6"/>
@@ -82,13 +79,13 @@ const NAV_ITEMS: {
       },
     ],
   },
+
   {
     section: "Operations",
     items: [
       {
         page: "prediction",
         label: "Prediction",
-        // Two stacked diamond shapes — represents ML layering / stacking
         icon: (
           <svg viewBox="0 0 16 16">
             <path d="M8 2L2 5L8 8L14 5L8 2Z"/>
@@ -99,7 +96,6 @@ const NAV_ITEMS: {
       {
         page: "incidents",
         label: "Incidents",
-        // Lightning bolt — instant recognition for "alert/incident"
         icon: (
           <svg viewBox="0 0 16 16">
             <path d="M13 6H9L11 1L3 9H7L5 15L13 6Z"/>
@@ -109,11 +105,52 @@ const NAV_ITEMS: {
       {
         page: "settings",
         label: "Settings",
-        // Gear: center circle + 8 lines radiating outward (like sun rays)
         icon: (
           <svg viewBox="0 0 16 16">
             <circle cx="8" cy="8" r="2"/>
             <path d="M8 1V3M8 13V15M1 8H3M13 8H15M3.5 3.5L5 5M11 11L12.5 12.5M12.5 3.5L11 5M5 11L3.5 12.5"/>
+          </svg>
+        ),
+      },
+    ],
+  },
+
+  // 🔥 NEW SECTION
+  {
+    section: "Integrations",
+    items: [
+      {
+        page: "connect",
+        label: "Connect",
+        // Link / plug icon
+        icon: (
+          <svg viewBox="0 0 16 16">
+            <path d="M6 5L10 9M5 10a3 3 0 010-4l1-1a3 3 0 014 0M11 6a3 3 0 010 4l-1 1a3 3 0 01-4 0"/>
+          </svg>
+        ),
+      },
+      {
+        page: "repo-analyzer",
+        label: "Repo Analyzer",
+        // Code / repo icon
+        icon: (
+          <svg viewBox="0 0 16 16">
+            <polyline points="6,4 2,8 6,12"/>
+            <polyline points="10,4 14,8 10,12"/>
+          </svg>
+        ),
+      },
+      {
+        page: "endpoint-monitor",
+        label: "Endpoint Monitor",
+        // Network / nodes icon
+        icon: (
+          <svg viewBox="0 0 16 16">
+            <circle cx="3" cy="8" r="2"/>
+            <circle cx="13" cy="4" r="2"/>
+            <circle cx="13" cy="12" r="2"/>
+            <line x1="5" y1="8" x2="11" y2="4"/>
+            <line x1="5" y1="8" x2="11" y2="12"/>
           </svg>
         ),
       },

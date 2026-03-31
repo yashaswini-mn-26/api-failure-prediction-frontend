@@ -209,24 +209,61 @@ const PredictionPage: React.FC<Props> = ({ logs, onRefresh }) => {
         </div>
 
         {/* Suggestion */}
-        {result && (
-          <div className="card">
-            <div className="card-head"><div className="card-title">Recommendation Engine</div></div>
-            <div style={{ padding: 16 }}>
-              {result.suggestion.split(" | ").map((s, i) => (
-                <div key={i} style={{
-                  display: "flex", alignItems: "flex-start", gap: 10,
-                  padding: "10px 12px", borderRadius: "var(--r)",
-                  background: "var(--bg3)", border: "1px solid var(--border)",
-                  marginBottom: 8,
-                }}>
-                  <span style={{ color: "#f59e0b", fontSize: 14, flexShrink: 0, marginTop: 1 }}>⚡</span>
-                  <span style={{ fontSize: 13, color: "var(--text2)" }}>{s}</span>
-                </div>
-              ))}
-            </div>
+ {result && (
+  <div className="card">
+    <div className="card-head">
+      <div className="card-title">Recommendation Engine</div>
+    </div>
+
+    <div style={{ padding: 16 }}>
+      {result.suggestion ? (
+        result.suggestion.split(" | ").map((s, i) => (
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 10,
+              padding: "10px 12px",
+              borderRadius: "var(--r)",
+              background: "var(--bg3)",
+              border: "1px solid var(--border)",
+              marginBottom: 8,
+            }}
+          >
+            <span
+              style={{
+                color: "#f59e0b",
+                fontSize: 14,
+                flexShrink: 0,
+                marginTop: 1,
+              }}
+            >
+              ⚡
+            </span>
+            <span style={{ fontSize: 13, color: "var(--text2)" }}>
+              {s}
+            </span>
           </div>
-        )}
+        ))
+      ) : (
+        <div
+          style={{
+            padding: "12px",
+            borderRadius: "var(--r)",
+            background: "var(--bg3)",
+            border: "1px solid var(--border)",
+            fontSize: 13,
+            color: "var(--text3)",
+            textAlign: "center",
+          }}
+        >
+          No recommendations available
+        </div>
+      )}
+    </div>
+  </div>
+)}
 
         {/* History chart */}
         {history.length >= 2 && (
