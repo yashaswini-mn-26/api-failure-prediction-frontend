@@ -168,7 +168,7 @@ const PredictionPage: React.FC<Props> = ({ logs, onRefresh }) => {
           </div>
           <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 20 }}>
             {FIELDS.map(field => {
-              const pct = ((form[field.name] - field.min) / (field.max - field.min)) * 100;
+              // const pct = ((form[field.name] - field.min) / (field.max - field.min)) * 100;
               const isWarning = field.name === "cpu_usage" || field.name === "memory_usage" ? form[field.name] > 80 : field.name === "response_time" ? form[field.name] > 1000 : false;
               const isError = field.name === "status_code" ? form[field.name] >= 500 : false;
 
@@ -285,7 +285,7 @@ const PredictionPage: React.FC<Props> = ({ logs, onRefresh }) => {
             </div>
             <div style={{ maxHeight: 340, overflowY: "auto" }}>
               {history.map((item, i) => {
-                const isHigh = item.result.risk_score > 60;
+                // const isHigh = item.result.risk_score > 60;
                 const color = item.result.risk_score > 80 ? "#ef4444" : item.result.risk_score > 60 ? "#f97316" : item.result.risk_score > 30 ? "#f59e0b" : "#22c55e";
                 return (
                   <div key={i} onClick={() => { setForm(item.input); setResult(item.result); }} style={{

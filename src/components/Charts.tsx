@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef} from "react";
 import { Chart, registerables } from "chart.js";
 import { LogEntry } from "../types/types";
 
